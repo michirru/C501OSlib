@@ -10,13 +10,12 @@ namespace C501OSlib
     {
         public Queue<Process> sort(Queue<Process> q)
         {
-            queueToArray = q.ToArray();
-            l1Sort(queueToArray);
+            sorted = new Queue<Process>(q.OrderBy(Process => Process.getRemainingBurst()).ThenBy(Process => Process.getArrivalTime()));
             return sorted;
         }
-        public void l1Sort(Process[] p)
+        public string getName()
         {
-
+            return "Shortest Job First Algorithm";
         }
     }
 }
