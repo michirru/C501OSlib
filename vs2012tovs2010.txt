@@ -1,0 +1,8 @@
+vs2012 to vs2010
+- open solution file in notepad
+     - replace "Format Version 12.00" with "Format Version 11.00" (without quotes.)
+     - replace "# Visual Studio 2012" with "# Visual Studio 2010" (without quotes.)
+
+- if still getting error open .csproj file with text editor
+     - change TargetFrameworkVersion from 4.5 to 4.0
+     - also edit app.config files that have references to .NET 4.5
