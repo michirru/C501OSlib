@@ -13,9 +13,8 @@ namespace C501OSlib
         private int time = 0;
         private Process[] process;
         private Queue<Process> readyQueue;
-        private List<Process> finishedProcess;
+        private Queue<Process> finishedQueue;
         private Process sp;
-        private bool preemptive = false;
         private bool autoSim = false;
         //----
         public CPUSchedulerSimulator(string alg)
@@ -23,17 +22,14 @@ namespace C501OSlib
             if (alg == "fifo")
             {
                 algo = new FIFOalgorithm();
-                preemptive = false;
             }
             else if (alg == "sjf")
             {
                 algo = new SJFalgorithm();
-                preemptive = false;
             }
             else if (alg == "prio")
             {
                 algo = new HPRIalgorithm();
-                preemptive = false;
             }
         }
         //----
@@ -53,31 +49,31 @@ namespace C501OSlib
         private void createQueue()
         {
             readyQueue = new Queue<Process>(process.Length);
-            finishedProcess = new List<Process>(process.Length);
+            finishedQueue = new Queue<Process>(process.Length);
         }
         //----
         public void simulate(bool at)
         {
             autoSim = at;
-
+            
             checkArrival();
+            checkReadyQueue();
             checkCurrentProcess();
-            createCurrentProcess();
-            //increment time and decrement burst time method should be input here
+
         }
         public void checkArrival()
         {
             for (int i = 0; i < process.Length; i++)
             {
                 sp = process[i];
-                if (time == sp.getArrivalTime() && !sp.isArrived())
+                if (time == sp.getArrivalTime())
                 {
                     readyQueue.Enqueue(sp);
+                    algo.sort(readyQueue);
                 }
             }
-            readyQueue = algo.sort(readyQueue);
         }
-        public void createCurrentProcess()
+        public void checkReadyQueue()
         {
             if (!algo.isProcessing())
             {
@@ -87,20 +83,7 @@ namespace C501OSlib
         }
         public void checkCurrentProcess()
         {
-            if (algo.isProcessing())
-            {
-                sp = algo.getCurrentProcess();
-                if (sp.getRemainingBurst() == 0)
-                {
-                    finishedProcess.Add(algo.removeProcess());
-                }
 
-                //int difference = algo.compare(sp, readyQueue.Peek());
-                //if (difference >= 0)
-                //{
-
-                //}
-            }
         }
     }
 }

@@ -10,12 +10,13 @@ namespace C501OSlib
     {
         protected Process currentProcess;
         protected Process tempProc;
+        protected Process[] queueToArray;
         protected Queue<Process> sorted;
         protected bool gotProcess = false;
 
         public abstract Queue<Process> sort(Queue<Process> q);
-        public abstract string getName();
-
+        public abstract void l1Sort(Process[] p);
+        public abstract Process[] l2Sort(Process p1, Process p2);
         public bool addProcess(Process proc)
         {
             if (!gotProcess)

@@ -22,7 +22,7 @@ namespace C501OSlib
         private bool finished = false;
 
 
-        private static Random random = new Random();
+        private Random random = new Random();
 
         public Process()
         {
@@ -62,7 +62,5 @@ namespace C501OSlib
         }
 
         public int getArrivalTime() { return arrivalTime; }
-        public int getRemainingBurst() { return remainingBurst; }
-        public bool isArrived() { return arrived; }
     }
 }
