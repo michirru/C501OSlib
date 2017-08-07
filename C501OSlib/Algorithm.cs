@@ -6,22 +6,23 @@ using System.Threading.Tasks;
 
 namespace C501OSlib
 {
-    class Algorithm
+    public abstract class Algorithm
     {
         protected Process currentProcess;
         protected Process tempProc;
-        protected Process[] queueToArray;
         protected Queue<Process> sorted;
         protected bool gotProcess = false;
 
         public abstract Queue<Process> sort(Queue<Process> q);
-        public abstract void l1Sort(Process[] p);
-        public abstract Process[] l2Sort(Process p1, Process p2);
-        public bool addProcess(Process proc)
+        public abstract string getName();
+
+        public bool addProcess(Process proc, int time)
         {
             if (!gotProcess)
             {
                 tempProc = null;
+                proc.setStartTime(time);
+                
                 currentProcess = proc;
                 gotProcess = true;
                 return gotProcess;
@@ -30,9 +31,10 @@ namespace C501OSlib
         }
         public Process removeProcess()
         {
-            tempProc = null;
+            currentProcess.stopRunning();
             tempProc = currentProcess;
             currentProcess = null;
+            gotProcess = false;
             return tempProc;
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace C501OSlib
@@ -11,10 +12,11 @@ namespace C501OSlib
         //----
         private Algorithm algo;
         private int time = 0;
-        private Process[] process;
+        private List<Process> processList;
         private Queue<Process> readyQueue;
-        private Queue<Process> finishedQueue;
+        private List<Process> finishedProcess;
         private Process sp;
+        private bool preemptive = false;
         private bool autoSim = false;
         //----
         public CPUSchedulerSimulator(string alg)
@@ -22,25 +24,30 @@ namespace C501OSlib
             if (alg == "fifo")
             {
                 algo = new FIFOalgorithm();
+                preemptive = false;
             }
             else if (alg == "sjf")
             {
                 algo = new SJFalgorithm();
+                preemptive = false;
             }
             else if (alg == "prio")
             {
                 algo = new HPRIalgorithm();
+                preemptive = false;
             }
         }
         //----
-        public void CreateRandomProcess()
+        public void CreateRandomProcess(out List<Process> processListOut)
         {
-            process = new Process[10];
-            for (int i = 0; i < process.Length; i++)
+            processList = new List<Process>(10);
+            for (int i = 0; i < processList.Capacity; i++)
             {
-                process[i] = new Process();
+                sp = new Process();
+                processList.Add(sp);
             }
             createQueue();
+            processListOut = processList;
         }
         public void createBatchProcess()
         {
@@ -48,42 +55,68 @@ namespace C501OSlib
         }
         private void createQueue()
         {
-            readyQueue = new Queue<Process>(process.Length);
-            finishedQueue = new Queue<Process>(process.Length);
+            readyQueue = new Queue<Process>(processList.Capacity);
+            finishedProcess = new List<Process>(processList.Capacity);
         }
         //----
-        public void simulate(bool at)
+        public void simulate(out List<Process> processListOut, out Queue<Process> readyQueueOut, out List<Process> finishedProcessOut, out Process currentProcessOut, out int timeOut)
         {
-            autoSim = at;
-            
-            checkArrival();
-            checkReadyQueue();
-            checkCurrentProcess();
-
-        }
-        public void checkArrival()
-        {
-            for (int i = 0; i < process.Length; i++)
+            //autoSim = at;
+            if (readyQueue.Count != 0 || algo.isProcessing())
             {
-                sp = process[i];
-                if (time == sp.getArrivalTime())
+                IncreaseTime();
+            }
+            checkArrival();
+            checkCurrentProcess();
+            createCurrentProcess();
+            processListOut = processList;
+            readyQueueOut = readyQueue;
+            finishedProcessOut = finishedProcess;
+            currentProcessOut = algo.getCurrentProcess();
+            timeOut = time;
+        }
+        private void checkArrival()
+        {
+            for (int i = 0; i < processList.Capacity; i++)
+            {
+                sp = processList.ElementAt(i);
+                if (time == sp.getArrivalTime() && !sp.isArrived())
                 {
                     readyQueue.Enqueue(sp);
-                    algo.sort(readyQueue);
+                }
+            }
+            readyQueue = algo.sort(readyQueue);
+        }
+        private void createCurrentProcess()
+        {
+            if (!algo.isProcessing() && readyQueue.Count != 0)
+            {
+                sp = readyQueue.Dequeue();
+                algo.addProcess(sp, time);
+            }
+        }
+        private void checkCurrentProcess()
+        {
+            if (algo.isProcessing())
+            {
+                sp = algo.getCurrentProcess();
+                if (sp.isFinished())
+                {
+                    finishedProcess.Add(algo.removeProcess());
                 }
             }
         }
-        public void checkReadyQueue()
+        private void IncreaseTime()
         {
-            if (!algo.isProcessing())
+            if (readyQueue.Count != 0 || algo.isProcessing())
             {
-                sp = readyQueue.Dequeue();
-                algo.addProcess(sp);
+                time++;
+                if (algo.isProcessing())
+                {
+                    sp = algo.getCurrentProcess();
+                    sp.processing(time);
+                }
             }
-        }
-        public void checkCurrentProcess()
-        {
-
         }
     }
 }

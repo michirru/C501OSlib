@@ -1,0 +1,4 @@
+C:\Users\M\documents\visual studio 2012\Projects\C501OSlib\C501OSlib\bin\Release\C501OSlib.dll
+C:\Users\M\documents\visual studio 2012\Projects\C501OSlib\C501OSlib\bin\Release\C501OSlib.pdb
+C:\Users\M\documents\visual studio 2012\Projects\C501OSlib\C501OSlib\obj\Release\C501OSlib.dll
+C:\Users\M\documents\visual studio 2012\Projects\C501OSlib\C501OSlib\obj\Release\C501OSlib.pdb

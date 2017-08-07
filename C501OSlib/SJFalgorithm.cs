@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace C501OSlib
 {
-    class SJFalgorithm : Algorithm
+    public class SJFalgorithm : Algorithm
     {
-        public Queue<Process> sort(Queue<Process> q)
+        public override Queue<Process> sort(Queue<Process> q)
         {
-            queueToArray = q.ToArray();
-            l1Sort(queueToArray);
+            sorted = new Queue<Process>(q.OrderBy(Process => Process.getRemainingBurst()).ThenBy(Process => Process.getArrivalTime()));
             return sorted;
         }
-        public void l1Sort(Process[] p)
+        public override string getName()
         {
-
+            return "Shortest Job First Algorithm";
         }
     }
 }
