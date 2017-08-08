@@ -41,6 +41,10 @@
             this.BurstTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblFinished = new System.Windows.Forms.GroupBox();
             this.dataFinished = new System.Windows.Forms.DataGridView();
+            this.FinishedPId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TimeFin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TurnaroundTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.WaitingTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.dataReady = new System.Windows.Forms.DataGridView();
             this.ReadyPId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -69,10 +73,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnFinished = new System.Windows.Forms.Button();
-            this.FinishedPId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TimeFin = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TurnaroundTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.WaitingTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AddProcess = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataInitial)).BeginInit();
@@ -85,6 +86,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.AddProcess);
             this.groupBox1.Controls.Add(this.btnEnter);
             this.groupBox1.Controls.Add(this.txtBurst);
             this.groupBox1.Controls.Add(this.txtArrival);
@@ -99,11 +101,11 @@
             // 
             // btnEnter
             // 
-            this.btnEnter.Location = new System.Drawing.Point(70, 103);
+            this.btnEnter.Location = new System.Drawing.Point(12, 108);
             this.btnEnter.Name = "btnEnter";
             this.btnEnter.Size = new System.Drawing.Size(75, 23);
             this.btnEnter.TabIndex = 4;
-            this.btnEnter.Text = "Enter";
+            this.btnEnter.Text = "Auto Fill";
             this.btnEnter.UseVisualStyleBackColor = true;
             this.btnEnter.Click += new System.EventHandler(this.btnEnter_Click);
             // 
@@ -207,6 +209,26 @@
             this.dataFinished.RowHeadersVisible = false;
             this.dataFinished.Size = new System.Drawing.Size(398, 283);
             this.dataFinished.TabIndex = 1;
+            // 
+            // FinishedPId
+            // 
+            this.FinishedPId.HeaderText = "Process ID";
+            this.FinishedPId.Name = "FinishedPId";
+            // 
+            // TimeFin
+            // 
+            this.TimeFin.HeaderText = "Time Finished";
+            this.TimeFin.Name = "TimeFin";
+            // 
+            // TurnaroundTime
+            // 
+            this.TurnaroundTime.HeaderText = "Turnaround Time";
+            this.TurnaroundTime.Name = "TurnaroundTime";
+            // 
+            // WaitingTime
+            // 
+            this.WaitingTime.HeaderText = "Waiting Time";
+            this.WaitingTime.Name = "WaitingTime";
             // 
             // groupBox4
             // 
@@ -474,25 +496,15 @@
             this.btnFinished.Text = "Finish";
             this.btnFinished.UseVisualStyleBackColor = true;
             // 
-            // FinishedPId
+            // AddProcess
             // 
-            this.FinishedPId.HeaderText = "Process ID";
-            this.FinishedPId.Name = "FinishedPId";
-            // 
-            // TimeFin
-            // 
-            this.TimeFin.HeaderText = "Time Finished";
-            this.TimeFin.Name = "TimeFin";
-            // 
-            // TurnaroundTime
-            // 
-            this.TurnaroundTime.HeaderText = "Turnaround Time";
-            this.TurnaroundTime.Name = "TurnaroundTime";
-            // 
-            // WaitingTime
-            // 
-            this.WaitingTime.HeaderText = "Waiting Time";
-            this.WaitingTime.Name = "WaitingTime";
+            this.AddProcess.Location = new System.Drawing.Point(97, 108);
+            this.AddProcess.Name = "AddProcess";
+            this.AddProcess.Size = new System.Drawing.Size(75, 23);
+            this.AddProcess.TabIndex = 5;
+            this.AddProcess.Text = "Add Process";
+            this.AddProcess.UseVisualStyleBackColor = true;
+            this.AddProcess.Click += new System.EventHandler(this.AddProcess_Click);
             // 
             // Form1
             // 
@@ -580,6 +592,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeFin;
         private System.Windows.Forms.DataGridViewTextBoxColumn TurnaroundTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn WaitingTime;
+        private System.Windows.Forms.Button AddProcess;
     }
 }
 

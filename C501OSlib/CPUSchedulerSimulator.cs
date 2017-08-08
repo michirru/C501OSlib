@@ -36,12 +36,11 @@ namespace C501OSlib
                 algo = new HPRIalgorithm();
                 preemptive = false;
             }
-            processList = new List<Process>(length);
+            CreateProcessList(length);
         }
         //----
         public void CreateRandomProcess(out List<Process> processListOut)
         {
-            processList = new List<Process>(10);
             for (int i = 0; i < processList.Capacity; i++)
             {
                 sp = new Process();
@@ -53,15 +52,18 @@ namespace C501OSlib
         public void CreateProcessList(int length)
         {
             processList = new List<Process>(length);
+            createQueue();
         }
-        public string CreateProcess(int at, int bt)
+        public string CreateProcess(int at, int bt, out List<Process> processListOut)
         {
-            var cp = new Process(at, bt);
             if (processList.Count < processList.Capacity)
             {
+                var cp = new Process(at, bt);
                 processList.Add(cp);
+                processListOut = processList;
                 return "Process Created";
             }
+            processListOut = processList;
             return "Initial Process Limit Reached";
         }
         private void createQueue()
@@ -73,10 +75,7 @@ namespace C501OSlib
         public void simulate(out List<Process> processListOut, out Queue<Process> readyQueueOut, out List<Process> finishedProcessOut, out Process currentProcessOut, out int timeOut)
         {
             //autoSim = at;
-            if (readyQueue.Count != 0 || algo.isProcessing())
-            {
-                IncreaseTime();
-            }
+            IncreaseTime();
             checkArrival();
             checkCurrentProcess();
             createCurrentProcess();
@@ -88,7 +87,7 @@ namespace C501OSlib
         }
         private void checkArrival()
         {
-            for (int i = 0; i < processList.Capacity; i++)
+            for (int i = 0; i < processList.Count; i++)
             {
                 sp = processList.ElementAt(i);
                 if (time == sp.getArrivalTime() && !sp.isArrived())

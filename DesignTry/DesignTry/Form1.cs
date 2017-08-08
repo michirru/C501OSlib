@@ -68,5 +68,19 @@ namespace DesignTry
         {
             e.Handled = !char.IsDigit(e.KeyChar);
         }
+
+        private void AddProcess_Click(object sender, EventArgs e)
+        {
+            cpuSim.CreateProcess(int.Parse(txtArrival.Text), int.Parse(txtBurst.Text), out procList);
+            txtArrival.Text = "";
+            txtBurst.Text = "";
+            dataInitial.Rows.Clear();
+            for (int i = 0; i < procList.Count; i++)
+            {
+                var p = procList.ElementAt(i);
+                string[] fill = { "PID" + i, p.getArrivalTime().ToString(), p.getRemainingBurst().ToString() };
+                dataInitial.Rows.Add(fill);
+            }
+        }
     }
 }
