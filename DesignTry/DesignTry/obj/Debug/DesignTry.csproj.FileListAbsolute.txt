@@ -18,3 +18,14 @@ C:\Users\M\Documents\code download\C501OSlib-master\DesignTry\DesignTry\obj\Debu
 C:\Users\M\Documents\code download\C501OSlib-master\DesignTry\DesignTry\obj\Debug\DesignTry.csproj.GenerateResource.Cache
 C:\Users\M\Documents\code download\C501OSlib-master\DesignTry\DesignTry\bin\Debug\C501OSlib.dll
 C:\Users\M\Documents\code download\C501OSlib-master\DesignTry\DesignTry\bin\Debug\C501OSlib.pdb
+C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\bin\Debug\DesignTry.exe.config
+C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\obj\Debug\DesignTry.exe
+C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\obj\Debug\DesignTry.pdb
+C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\bin\Debug\DesignTry.exe
+C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\bin\Debug\DesignTry.pdb
+C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\bin\Debug\C501OSlib.dll
+C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\bin\Debug\C501OSlib.pdb
+C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\obj\Debug\DesignTry.csprojResolveAssemblyReference.cache
+C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\obj\Debug\DesignTry.Form1.resources
+C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\obj\Debug\DesignTry.Properties.Resources.resources
+C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\obj\Debug\DesignTry.csproj.GenerateResource.Cache

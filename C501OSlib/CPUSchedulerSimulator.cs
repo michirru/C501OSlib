@@ -19,7 +19,7 @@ namespace C501OSlib
         private bool preemptive = false;
         private bool autoSim = false;
         //----
-        public CPUSchedulerSimulator(string alg)
+        public CPUSchedulerSimulator(string alg, int length)
         {
             if (alg == "fifo")
             {
@@ -36,6 +36,7 @@ namespace C501OSlib
                 algo = new HPRIalgorithm();
                 preemptive = false;
             }
+            processList = new List<Process>(length);
         }
         //----
         public void CreateRandomProcess(out List<Process> processListOut)
@@ -49,9 +50,19 @@ namespace C501OSlib
             createQueue();
             processListOut = processList;
         }
-        public void createBatchProcess()
+        public void CreateProcessList(int length)
         {
-
+            processList = new List<Process>(length);
+        }
+        public string CreateProcess(int at, int bt)
+        {
+            var cp = new Process(at, bt);
+            if (processList.Count < processList.Capacity)
+            {
+                processList.Add(cp);
+                return "Process Created";
+            }
+            return "Initial Process Limit Reached";
         }
         private void createQueue()
         {

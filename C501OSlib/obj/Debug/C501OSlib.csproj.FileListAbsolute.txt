@@ -3,3 +3,7 @@ C:\Users\M\documents\visual studio 2012\Projects\C501OSlib\C501OSlib\bin\Debug\C
 C:\Users\M\documents\visual studio 2012\Projects\C501OSlib\C501OSlib\obj\Debug\C501OSlib.dll
 C:\Users\M\documents\visual studio 2012\Projects\C501OSlib\C501OSlib\obj\Debug\C501OSlib.pdb
 C:\Users\M\Documents\Visual Studio 2012\Projects\C501OSlib\C501OSlib\obj\Debug\C501OSlib.csprojResolveAssemblyReference.cache
+C:\Users\M\Documents\code download\C501OSlib\C501OSlib\bin\Debug\C501OSlib.dll
+C:\Users\M\Documents\code download\C501OSlib\C501OSlib\bin\Debug\C501OSlib.pdb
+C:\Users\M\Documents\code download\C501OSlib\C501OSlib\obj\Debug\C501OSlib.dll
+C:\Users\M\Documents\code download\C501OSlib\C501OSlib\obj\Debug\C501OSlib.pdb

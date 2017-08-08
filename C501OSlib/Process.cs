@@ -35,9 +35,10 @@ namespace C501OSlib
                 arrivalTime = random.Next(min, min+5) * PID / PID;
                 min = arrivalTime + 1;
             }
-            catch (DivideByZeroException e)
+            catch (DivideByZeroException)
             {
                 arrivalTime = 0;
+                min = arrivalTime + 1;
             }
             currentArrival = arrivalTime;
             burstTime = random.Next(5, 15);
@@ -65,8 +66,7 @@ namespace C501OSlib
             priorityLevel = pl;
             nextPID++;
         }
-
-        public int processing(int time)
+        internal int processing(int time)
         {
             remainingBurst--;
             if (remainingBurst == 0)
@@ -98,5 +98,23 @@ namespace C501OSlib
         public bool isArrived() { return arrived; }
         public bool isRunning() { return running; }
         public bool isFinished() { return finished; }
+
+        public void Reset()
+        {
+            currentArrival = arrivalTime;
+            remainingBurst = burstTime;
+            startTime = 0;
+            finishedTime = 0;
+            waitingTime = 0;
+            turnaroundTime = 0;
+            arrived = false;
+            running = false;
+            finished = false;
+        }
+        public static void ResetCounter()
+        {
+            nextPID = 0;
+            min = 0;
+        }
     }
 }

@@ -19,19 +19,17 @@ namespace DesignTry
         List<Process> finished;
         Process current;
         int timeUpdate;
-        CPUSchedulerSimulator cpuSim = new CPUSchedulerSimulator("sjf");
+        CPUSchedulerSimulator cpuSim = new CPUSchedulerSimulator("sjf", 10);
 
         public Form1()
         {
             InitializeComponent();
             this.txtArrival.KeyPress += new KeyPressEventHandler(txtArrival_KeyPress);
             this.txtBurst.KeyPress += new KeyPressEventHandler(txtBurst_KeyPress);
-
-            
         }
-        int ctr = 0;
         private void btnEnter_Click(object sender, EventArgs e)
         {
+            Process.ResetCounter();
             cpuSim.CreateRandomProcess(out procList);
             dataInitial.Rows.Clear();
             for (int i = 0; i < procList.Capacity; i++)
@@ -39,35 +37,8 @@ namespace DesignTry
                 var p = procList.ElementAt(i);
                 string[] fill = { "PID"+i, p.getArrivalTime().ToString(), p.getRemainingBurst().ToString() };
                 dataInitial.Rows.Add(fill);
-                //Thread.Sleep(500);
             }
-            /*
-            if (txtArrival.Text == "" || txtBurst.Text == "")
-            {
-                MessageBox.Show("Please enter a value.", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                ctr++;
-                if (ctr == 10) 
-                {
-                btnEnter.Enabled = false;
-                txtArrival.Enabled = false;
-                txtBurst.Enabled = false;
-                }
-                string firstColum = txtArrival.Text;
-                string secondColum = txtBurst.Text;
-                string zeroColum = "P" + ctr;
-                string[] row = { zeroColum, firstColum, secondColum };
-                dataInitial.Rows.Add(row);
-
-                txtArrival.Text = "";
-                txtBurst.Text = "";
-            }
-             */
         }
-
-        int time = 0;
         private void button11_Click(object sender, EventArgs e)
         {
             dataReady.Rows.Clear();
@@ -86,10 +57,6 @@ namespace DesignTry
                 dataFinished.Rows.Add(fill);
             }
             lblTime.Text = timeUpdate.ToString();
-
-            //time++;
-            //string timee = time.ToString();
-            //lblTime.Text = timee;
         }
 
         private void txtArrival_KeyPress(object sender, KeyPressEventArgs e)
