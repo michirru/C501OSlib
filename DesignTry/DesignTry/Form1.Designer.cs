@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.resetBtn = new System.Windows.Forms.Button();
             this.AddProcess = new System.Windows.Forms.Button();
@@ -41,9 +42,11 @@
             this.PId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ArriveTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BurstTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Prio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblFinished = new System.Windows.Forms.GroupBox();
             this.dataFinished = new System.Windows.Forms.DataGridView();
             this.FinishedPId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TimeFin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TurnaroundTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WaitingTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -74,10 +77,15 @@
             this.currentLbl = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.btnNext = new System.Windows.Forms.Button();
-            this.btnFinished = new System.Windows.Forms.Button();
+            this.SimulateBtn = new System.Windows.Forms.Button();
             this.remTimeCounterLbl = new System.Windows.Forms.Label();
             this.remLbl = new System.Windows.Forms.Label();
             this.FormTextAnimator = new System.ComponentModel.BackgroundWorker();
+            this.AlgorithmBox = new System.Windows.Forms.ComboBox();
+            this.AutoSimulateTimer = new System.Windows.Forms.Timer(this.components);
+            this.AutoSimulateWorker = new System.ComponentModel.BackgroundWorker();
+            this.speedBox = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataInitial)).BeginInit();
@@ -97,7 +105,7 @@
             this.groupBox1.Controls.Add(this.txtArrival);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 39);
+            this.groupBox1.Location = new System.Drawing.Point(12, 65);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(219, 142);
             this.groupBox1.TabIndex = 0;
@@ -190,7 +198,8 @@
             this.dataInitial.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.PId,
             this.ArriveTime,
-            this.BurstTime});
+            this.BurstTime,
+            this.Prio});
             this.dataInitial.Enabled = false;
             this.dataInitial.Location = new System.Drawing.Point(6, 19);
             this.dataInitial.MultiSelect = false;
@@ -215,6 +224,11 @@
             this.BurstTime.HeaderText = "Burst Time";
             this.BurstTime.Name = "BurstTime";
             // 
+            // Prio
+            // 
+            this.Prio.HeaderText = "Priority Level";
+            this.Prio.Name = "Prio";
+            // 
             // lblFinished
             // 
             this.lblFinished.Controls.Add(this.dataFinished);
@@ -236,6 +250,7 @@
             this.dataFinished.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataFinished.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.FinishedPId,
+            this.StartTime,
             this.TimeFin,
             this.TurnaroundTime,
             this.WaitingTime});
@@ -252,6 +267,11 @@
             // 
             this.FinishedPId.HeaderText = "Process ID";
             this.FinishedPId.Name = "FinishedPId";
+            // 
+            // StartTime
+            // 
+            this.StartTime.HeaderText = "Start Time";
+            this.StartTime.Name = "StartTime";
             // 
             // TimeFin
             // 
@@ -329,7 +349,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(14, 207);
+            this.label4.Location = new System.Drawing.Point(14, 210);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(89, 31);
             this.label4.TabIndex = 4;
@@ -339,7 +359,7 @@
             // 
             this.lblTime.AutoSize = true;
             this.lblTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTime.Location = new System.Drawing.Point(92, 207);
+            this.lblTime.Location = new System.Drawing.Point(92, 210);
             this.lblTime.Name = "lblTime";
             this.lblTime.Size = new System.Drawing.Size(29, 31);
             this.lblTime.TabIndex = 5;
@@ -349,7 +369,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(17, 340);
+            this.label7.Location = new System.Drawing.Point(17, 343);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(169, 16);
             this.label7.TabIndex = 6;
@@ -359,7 +379,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(17, 311);
+            this.label8.Location = new System.Drawing.Point(17, 314);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(145, 16);
             this.label8.TabIndex = 7;
@@ -369,7 +389,7 @@
             // 
             this.ttaLbl.AutoSize = true;
             this.ttaLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ttaLbl.Location = new System.Drawing.Point(182, 340);
+            this.ttaLbl.Location = new System.Drawing.Point(182, 343);
             this.ttaLbl.Name = "ttaLbl";
             this.ttaLbl.Size = new System.Drawing.Size(15, 16);
             this.ttaLbl.TabIndex = 8;
@@ -379,7 +399,7 @@
             // 
             this.wtaveLbl.AutoSize = true;
             this.wtaveLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wtaveLbl.Location = new System.Drawing.Point(158, 311);
+            this.wtaveLbl.Location = new System.Drawing.Point(158, 314);
             this.wtaveLbl.Name = "wtaveLbl";
             this.wtaveLbl.Size = new System.Drawing.Size(15, 16);
             this.wtaveLbl.TabIndex = 9;
@@ -516,7 +536,7 @@
             // 
             this.currentLbl.AutoSize = true;
             this.currentLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.currentLbl.Location = new System.Drawing.Point(125, 253);
+            this.currentLbl.Location = new System.Drawing.Point(125, 256);
             this.currentLbl.Name = "currentLbl";
             this.currentLbl.Size = new System.Drawing.Size(16, 16);
             this.currentLbl.TabIndex = 13;
@@ -526,7 +546,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(17, 253);
+            this.label13.Location = new System.Drawing.Point(17, 256);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(106, 16);
             this.label13.TabIndex = 12;
@@ -534,29 +554,29 @@
             // 
             // btnNext
             // 
-            this.btnNext.Location = new System.Drawing.Point(20, 412);
+            this.btnNext.Location = new System.Drawing.Point(20, 407);
             this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(75, 23);
+            this.btnNext.Size = new System.Drawing.Size(88, 28);
             this.btnNext.TabIndex = 5;
             this.btnNext.Text = "Next";
             this.btnNext.UseVisualStyleBackColor = true;
             this.btnNext.Click += new System.EventHandler(this.btnNext_click);
             // 
-            // btnFinished
+            // SimulateBtn
             // 
-            this.btnFinished.Location = new System.Drawing.Point(109, 412);
-            this.btnFinished.Name = "btnFinished";
-            this.btnFinished.Size = new System.Drawing.Size(75, 23);
-            this.btnFinished.TabIndex = 6;
-            this.btnFinished.Text = "Finish";
-            this.btnFinished.UseVisualStyleBackColor = true;
-            this.btnFinished.Click += new System.EventHandler(this.btnFinished_Click);
+            this.SimulateBtn.Location = new System.Drawing.Point(114, 407);
+            this.SimulateBtn.Name = "SimulateBtn";
+            this.SimulateBtn.Size = new System.Drawing.Size(88, 28);
+            this.SimulateBtn.TabIndex = 6;
+            this.SimulateBtn.Text = "Auto Simulate";
+            this.SimulateBtn.UseVisualStyleBackColor = true;
+            this.SimulateBtn.Click += new System.EventHandler(this.simulateBtn_Click);
             // 
             // remTimeCounterLbl
             // 
             this.remTimeCounterLbl.AutoSize = true;
             this.remTimeCounterLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.remTimeCounterLbl.Location = new System.Drawing.Point(125, 282);
+            this.remTimeCounterLbl.Location = new System.Drawing.Point(125, 285);
             this.remTimeCounterLbl.Name = "remTimeCounterLbl";
             this.remTimeCounterLbl.Size = new System.Drawing.Size(15, 16);
             this.remTimeCounterLbl.TabIndex = 17;
@@ -566,7 +586,7 @@
             // 
             this.remLbl.AutoSize = true;
             this.remLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.remLbl.Location = new System.Drawing.Point(17, 282);
+            this.remLbl.Location = new System.Drawing.Point(17, 285);
             this.remLbl.Name = "remLbl";
             this.remLbl.Size = new System.Drawing.Size(109, 16);
             this.remLbl.TabIndex = 16;
@@ -576,14 +596,61 @@
             // 
             this.FormTextAnimator.DoWork += new System.ComponentModel.DoWorkEventHandler(this.FormTextAnimator_DoWork);
             // 
+            // AlgorithmBox
+            // 
+            this.AlgorithmBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.AlgorithmBox.Enabled = false;
+            this.AlgorithmBox.FormattingEnabled = true;
+            this.AlgorithmBox.Location = new System.Drawing.Point(12, 38);
+            this.AlgorithmBox.Name = "AlgorithmBox";
+            this.AlgorithmBox.Size = new System.Drawing.Size(219, 21);
+            this.AlgorithmBox.TabIndex = 18;
+            this.AlgorithmBox.TabStop = false;
+            this.AlgorithmBox.SelectedIndexChanged += new System.EventHandler(this.AlgorithmBox_SelectedIndexChanged);
+            // 
+            // AutoSimulateTimer
+            // 
+            this.AutoSimulateTimer.Tick += new System.EventHandler(this.AutoSimulateTimer_Tick);
+            // 
+            // AutoSimulateWorker
+            // 
+            this.AutoSimulateWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.AutoSimulateWorker_DoWork);
+            // 
+            // speedBox
+            // 
+            this.speedBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.speedBox.FormattingEnabled = true;
+            this.speedBox.Items.AddRange(new object[] {
+            "1000",
+            "500",
+            "250",
+            "125"});
+            this.speedBox.Location = new System.Drawing.Point(137, 380);
+            this.speedBox.Name = "speedBox";
+            this.speedBox.Size = new System.Drawing.Size(76, 21);
+            this.speedBox.TabIndex = 19;
+            this.speedBox.TabStop = false;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(17, 383);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(114, 13);
+            this.label5.TabIndex = 20;
+            this.label5.Text = "Simulate Speed (in ms)";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1173, 468);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.speedBox);
+            this.Controls.Add(this.AlgorithmBox);
             this.Controls.Add(this.remTimeCounterLbl);
             this.Controls.Add(this.remLbl);
-            this.Controls.Add(this.btnFinished);
+            this.Controls.Add(this.SimulateBtn);
             this.Controls.Add(this.btnNext);
             this.Controls.Add(this.currentLbl);
             this.Controls.Add(this.label13);
@@ -650,17 +717,10 @@
         private System.Windows.Forms.Label currentLbl;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button btnNext;
-        private System.Windows.Forms.Button btnFinished;
+        private System.Windows.Forms.Button SimulateBtn;
         private System.Windows.Forms.DataGridView dataInitial;
         private System.Windows.Forms.DataGridView dataReady;
         private System.Windows.Forms.DataGridView dataFinished;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ArriveTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BurstTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FinishedPId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TimeFin;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TurnaroundTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn WaitingTime;
         private System.Windows.Forms.Button AddProcess;
         private System.Windows.Forms.Label remTimeCounterLbl;
         private System.Windows.Forms.Label remLbl;
@@ -669,6 +729,20 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ArrivalTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn RemainingBurst;
         private System.ComponentModel.BackgroundWorker FormTextAnimator;
+        private System.Windows.Forms.ComboBox AlgorithmBox;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ArriveTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BurstTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Prio;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FinishedPId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn StartTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TimeFin;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TurnaroundTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn WaitingTime;
+        private System.Windows.Forms.Timer AutoSimulateTimer;
+        private System.ComponentModel.BackgroundWorker AutoSimulateWorker;
+        private System.Windows.Forms.ComboBox speedBox;
+        private System.Windows.Forms.Label label5;
     }
 }
 

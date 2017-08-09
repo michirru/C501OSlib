@@ -19,14 +19,25 @@ namespace DesignTry
         List<Process> finished;
         Process current;
         int timeUpdate;
-        CPUSchedulerSimulator cpuSim; // = new CPUSchedulerSimulator("sjf", 10);
+        int speed;
+        bool simulate = false;
+        CPUSchedulerSimulator cpuSim;
 
         public Form1()
         {
             InitializeComponent();
             this.txtArrival.KeyPress += new KeyPressEventHandler(txtArrival_KeyPress);
             this.txtBurst.KeyPress += new KeyPressEventHandler(txtBurst_KeyPress);
-            cpuSim = new CPUSchedulerSimulator("sjf", 10);
+            //cpuSim = new CPUSchedulerSimulator("sjf", 10);
+            AlgorithmBox.DisplayMember = "Text";
+            AlgorithmBox.ValueMember = "Value";
+            List<ComboItem> items = new List<ComboItem>();
+            items.Add(new ComboItem { Text = "First In First Out", Value = "fifo" });
+            items.Add(new ComboItem { Text = "Shortest Job First", Value = "sjf" });
+            items.Add(new ComboItem { Text = "Highest Priority First", Value = "prio" });
+            AlgorithmBox.DataSource = items; 
+            AlgorithmBox.SelectedIndex = 1;
+            speedBox.SelectedIndex = 0;
             FormTextAnimator.RunWorkerAsync();
         }
         private void autoFillbtn_click(object sender, EventArgs e)
@@ -37,7 +48,7 @@ namespace DesignTry
             for (int i = 0; i < procList.Capacity; i++)
             {
                 var p = procList.ElementAt(i);
-                string[] fill = { "PID"+i, p.getArrivalTime().ToString(), p.getRemainingBurst().ToString() };
+                string[] fill = { "PID"+i, p.getArrivalTime().ToString(), p.getRemainingBurst().ToString(), p.getPriorityLevel().ToString() };
                 dataInitial.Rows.Add(fill);
             }
         }
@@ -55,7 +66,7 @@ namespace DesignTry
             for (int i = 0; i < finished.Count; i++)
             {
                 var finish = finished.ElementAt(i);
-                string[] fill = { "PID"+finish.getPID(), finish.getFinishedTime().ToString(), finish.getTurnaroundTime().ToString(), finish.getWaitingTime().ToString() };
+                string[] fill = { "PID"+finish.getPID(), finish.getStartTime().ToString(), finish.getFinishedTime().ToString(), finish.getTurnaroundTime().ToString(), finish.getWaitingTime().ToString() };
                 dataFinished.Rows.Add(fill);
             }
             updateLableText();
@@ -120,7 +131,31 @@ namespace DesignTry
 
         private void resetBtn_Click(object sender, EventArgs e)
         {
-            cpuSim = new CPUSchedulerSimulator("sjf", 10);
+            reset();
+        }
+
+        private void simulateBtn_Click(object sender, EventArgs e)
+        {
+            if (SimulateBtn.Text == "Stop")
+            {
+                simulate = false;
+                SimulateBtn.Text = "Auto Simulate";
+            }
+            else
+            {
+                simulate = true;
+                SimulateBtn.Text = "Stop";
+            }
+            AutoSimulateTimer_Tick(sender, e);
+        }
+
+        private void AlgorithmBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            reset();
+        }
+        private void reset()
+        {
+            cpuSim = new CPUSchedulerSimulator(AlgorithmBox.SelectedValue.ToString(), 10);
             Process.ResetCounter();
             dataInitial.Rows.Clear();
             dataReady.Rows.Clear();
@@ -136,21 +171,47 @@ namespace DesignTry
             wtaveLbl.Text = "0";
             ttaLbl.Text = "0";
         }
-
-        private void btnFinished_Click(object sender, EventArgs e)
+        private void AutoSimulateTimer_Tick(object sender, EventArgs e)
         {
-
+            if (simulate)
+            {
+                if (!AutoSimulateWorker.IsBusy)
+                    AutoSimulateWorker.RunWorkerAsync();
+            }
         }
 
+        private void AutoSimulateWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (simulate)
+            {
+                this.Invoke((MethodInvoker)delegate {
+                    speed = int.Parse(speedBox.SelectedItem.ToString());
+                    btnNext_click(sender, e);
+                    bool allfinished = true;
+                    foreach (Process p in procList)
+                    {
+                        if (!p.isFinished())
+                            allfinished = false;
+                    }
+                    if (allfinished)
+                    {
+                        simulateBtn_Click(sender, e);
+                        btnNext_click(sender, e);
+                    }
+                });
+                Thread.Sleep(speed);
+            }
+        }
+        //Just for fun
         private void FormTextAnimator_DoWork(object sender, DoWorkEventArgs e)
         {
+            Random rand = new Random();
+            string[] kamo0 = { "=͟͟͞͞( •̀д•́)))", "凸(｀0´)凸", "༼ つ ͠° ͟ ͟ʖ ͡° ༽つ", "(╬⓪益⓪)", "凸ಠ益ಠ)凸" };
+            string[] kamo1 = { "(ʘ言ʘ╬)", "(Ò 皿 Ó ╬)", "(@益@ .:;)", "(´･益･｀*)", "٩(ʘ益ʘ╬)۶", "Щ(ಠ益ಠЩ)" };
             while (true)
             {
-                Random rand = new Random();
-                this.Invoke((MethodInvoker)delegate { this.Text = "C501 - JAPANESE CORN 凸ಠ益ಠ)凸"; });
-                Thread.Sleep(rand.Next(250,1000));
-                this.Invoke((MethodInvoker)delegate { this.Text = "C501 - JAPANESE CORN 凸(｀0´)凸"; });
-                Thread.Sleep(rand.Next(250, 1000));
+                this.Invoke((MethodInvoker)delegate { this.Text = "C501 - JAPANESE CORN " + kamo0[rand.Next(kamo0.Length)] + "     " + kamo1[rand.Next(kamo1.Length)]; });
+                Thread.Sleep(rand.Next(125, 500));
             }
         }
     }
