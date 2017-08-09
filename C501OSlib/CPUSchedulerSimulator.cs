@@ -17,7 +17,6 @@ namespace C501OSlib
         private List<Process> finishedProcess;
         private Process sp;
         private bool preemptive = false;
-        private bool autoSim = false;
         //----
         public CPUSchedulerSimulator(string alg, int length)
         {
@@ -41,12 +40,11 @@ namespace C501OSlib
         //----
         public void CreateRandomProcess(out List<Process> processListOut)
         {
-            for (int i = 0; i < processList.Capacity; i++)
+            for (int i = 0; i < processList.Capacity && processList.Count != processList.Capacity; i++)
             {
                 sp = new Process();
                 processList.Add(sp);
             }
-            createQueue();
             processListOut = processList;
         }
         public void CreateProcessList(int length)
@@ -56,15 +54,19 @@ namespace C501OSlib
         }
         public string CreateProcess(int at, int bt, out List<Process> processListOut)
         {
+            string msgOut;
             if (processList.Count < processList.Capacity)
             {
                 var cp = new Process(at, bt);
                 processList.Add(cp);
-                processListOut = processList;
-                return "Process Created";
+                msgOut = "Process Created";
+            }
+            else
+            {
+                msgOut = "Initial Process Limit Reached";
             }
             processListOut = processList;
-            return "Initial Process Limit Reached";
+            return msgOut;
         }
         private void createQueue()
         {
@@ -74,11 +76,10 @@ namespace C501OSlib
         //----
         public void simulate(out List<Process> processListOut, out Queue<Process> readyQueueOut, out List<Process> finishedProcessOut, out Process currentProcessOut, out int timeOut)
         {
-            //autoSim = at;
-            IncreaseTime();
             checkArrival();
             checkCurrentProcess();
             createCurrentProcess();
+            IncreaseTime();
             processListOut = processList;
             readyQueueOut = readyQueue;
             finishedProcessOut = finishedProcess;
@@ -118,7 +119,15 @@ namespace C501OSlib
         }
         private void IncreaseTime()
         {
-            if (readyQueue.Count != 0 || algo.isProcessing())
+            bool allfinished = true;
+            foreach (Process proc in processList)
+            {
+                if (!proc.isFinished())
+                {
+                    allfinished = false;
+                }
+            }
+            if (!allfinished)
             {
                 time++;
                 if (algo.isProcessing())

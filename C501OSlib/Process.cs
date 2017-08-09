@@ -50,6 +50,7 @@ namespace C501OSlib
         {
             PID = nextPID;
             arrivalTime = at;
+            min = arrivalTime + 1;
             currentArrival = arrivalTime;
             burstTime = bt;
             remainingBurst = burstTime;
@@ -60,6 +61,7 @@ namespace C501OSlib
         {
             PID = nextPID;
             arrivalTime = at;
+            min = arrivalTime + 1;
             currentArrival = arrivalTime;
             burstTime = bt;
             remainingBurst = burstTime;

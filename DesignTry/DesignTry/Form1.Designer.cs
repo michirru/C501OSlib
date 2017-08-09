@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.resetBtn = new System.Windows.Forms.Button();
+            this.AddProcess = new System.Windows.Forms.Button();
             this.btnEnter = new System.Windows.Forms.Button();
             this.txtBurst = new System.Windows.Forms.TextBox();
             this.txtArrival = new System.Windows.Forms.TextBox();
@@ -48,15 +50,15 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.dataReady = new System.Windows.Forms.DataGridView();
             this.ReadyPId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ArrivalTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RemainingBurst = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.lblTime = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
+            this.ttaLbl = new System.Windows.Forms.Label();
+            this.wtaveLbl = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
@@ -69,11 +71,13 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
-            this.label12 = new System.Windows.Forms.Label();
+            this.currentLbl = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnFinished = new System.Windows.Forms.Button();
-            this.AddProcess = new System.Windows.Forms.Button();
+            this.remTimeCounterLbl = new System.Windows.Forms.Label();
+            this.remLbl = new System.Windows.Forms.Label();
+            this.FormTextAnimator = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataInitial)).BeginInit();
@@ -86,6 +90,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.resetBtn);
             this.groupBox1.Controls.Add(this.AddProcess);
             this.groupBox1.Controls.Add(this.btnEnter);
             this.groupBox1.Controls.Add(this.txtBurst);
@@ -99,22 +104,42 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Enter a process: (Max = 10)";
             // 
+            // resetBtn
+            // 
+            this.resetBtn.Location = new System.Drawing.Point(6, 103);
+            this.resetBtn.Name = "resetBtn";
+            this.resetBtn.Size = new System.Drawing.Size(62, 23);
+            this.resetBtn.TabIndex = 4;
+            this.resetBtn.Text = "Reset";
+            this.resetBtn.UseVisualStyleBackColor = true;
+            this.resetBtn.Click += new System.EventHandler(this.resetBtn_Click);
+            // 
+            // AddProcess
+            // 
+            this.AddProcess.Location = new System.Drawing.Point(153, 103);
+            this.AddProcess.Name = "AddProcess";
+            this.AddProcess.Size = new System.Drawing.Size(60, 23);
+            this.AddProcess.TabIndex = 2;
+            this.AddProcess.Text = "Insert";
+            this.AddProcess.UseVisualStyleBackColor = true;
+            this.AddProcess.Click += new System.EventHandler(this.AddProcess_Click);
+            // 
             // btnEnter
             // 
-            this.btnEnter.Location = new System.Drawing.Point(12, 108);
+            this.btnEnter.Location = new System.Drawing.Point(79, 103);
             this.btnEnter.Name = "btnEnter";
-            this.btnEnter.Size = new System.Drawing.Size(75, 23);
-            this.btnEnter.TabIndex = 4;
+            this.btnEnter.Size = new System.Drawing.Size(62, 23);
+            this.btnEnter.TabIndex = 3;
             this.btnEnter.Text = "Auto Fill";
             this.btnEnter.UseVisualStyleBackColor = true;
-            this.btnEnter.Click += new System.EventHandler(this.btnEnter_Click);
+            this.btnEnter.Click += new System.EventHandler(this.autoFillbtn_click);
             // 
             // txtBurst
             // 
             this.txtBurst.Location = new System.Drawing.Point(114, 68);
             this.txtBurst.Name = "txtBurst";
             this.txtBurst.Size = new System.Drawing.Size(69, 20);
-            this.txtBurst.TabIndex = 3;
+            this.txtBurst.TabIndex = 1;
             this.txtBurst.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtBurst_KeyPress);
             // 
             // txtArrival
@@ -122,7 +147,7 @@
             this.txtArrival.Location = new System.Drawing.Point(114, 28);
             this.txtArrival.Name = "txtArrival";
             this.txtArrival.Size = new System.Drawing.Size(69, 20);
-            this.txtArrival.TabIndex = 2;
+            this.txtArrival.TabIndex = 0;
             this.txtArrival.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtArrival_KeyPress);
             // 
             // label2
@@ -155,6 +180,10 @@
             // 
             // dataInitial
             // 
+            this.dataInitial.AllowUserToAddRows = false;
+            this.dataInitial.AllowUserToDeleteRows = false;
+            this.dataInitial.AllowUserToResizeColumns = false;
+            this.dataInitial.AllowUserToResizeRows = false;
             this.dataInitial.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataInitial.ColumnHeadersHeight = 34;
             this.dataInitial.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
@@ -164,10 +193,12 @@
             this.BurstTime});
             this.dataInitial.Enabled = false;
             this.dataInitial.Location = new System.Drawing.Point(6, 19);
+            this.dataInitial.MultiSelect = false;
             this.dataInitial.Name = "dataInitial";
             this.dataInitial.RowHeadersVisible = false;
             this.dataInitial.Size = new System.Drawing.Size(192, 286);
             this.dataInitial.TabIndex = 0;
+            this.dataInitial.TabStop = false;
             // 
             // PId
             // 
@@ -196,6 +227,10 @@
             // 
             // dataFinished
             // 
+            this.dataFinished.AllowUserToAddRows = false;
+            this.dataFinished.AllowUserToDeleteRows = false;
+            this.dataFinished.AllowUserToResizeColumns = false;
+            this.dataFinished.AllowUserToResizeRows = false;
             this.dataFinished.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataFinished.ColumnHeadersHeight = 34;
             this.dataFinished.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
@@ -204,11 +239,14 @@
             this.TimeFin,
             this.TurnaroundTime,
             this.WaitingTime});
+            this.dataFinished.Enabled = false;
             this.dataFinished.Location = new System.Drawing.Point(6, 19);
+            this.dataFinished.MultiSelect = false;
             this.dataFinished.Name = "dataFinished";
             this.dataFinished.RowHeadersVisible = false;
             this.dataFinished.Size = new System.Drawing.Size(398, 283);
             this.dataFinished.TabIndex = 1;
+            this.dataFinished.TabStop = false;
             // 
             // FinishedPId
             // 
@@ -242,33 +280,40 @@
             // 
             // dataReady
             // 
+            this.dataReady.AllowUserToAddRows = false;
+            this.dataReady.AllowUserToDeleteRows = false;
+            this.dataReady.AllowUserToResizeColumns = false;
+            this.dataReady.AllowUserToResizeRows = false;
             this.dataReady.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataReady.ColumnHeadersHeight = 34;
             this.dataReady.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataReady.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ReadyPId,
-            this.Column1,
-            this.Column2});
+            this.ArrivalTime,
+            this.RemainingBurst});
+            this.dataReady.Enabled = false;
             this.dataReady.Location = new System.Drawing.Point(6, 19);
+            this.dataReady.MultiSelect = false;
             this.dataReady.Name = "dataReady";
             this.dataReady.RowHeadersVisible = false;
             this.dataReady.Size = new System.Drawing.Size(258, 286);
             this.dataReady.TabIndex = 0;
+            this.dataReady.TabStop = false;
             // 
             // ReadyPId
             // 
             this.ReadyPId.HeaderText = "Process ID";
             this.ReadyPId.Name = "ReadyPId";
             // 
-            // Column1
+            // ArrivalTime
             // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
+            this.ArrivalTime.HeaderText = "Arrival Time";
+            this.ArrivalTime.Name = "ArrivalTime";
             // 
-            // Column2
+            // RemainingBurst
             // 
-            this.Column2.HeaderText = "Column2";
-            this.Column2.Name = "Column2";
+            this.RemainingBurst.HeaderText = "Remaining Burst";
+            this.RemainingBurst.Name = "RemainingBurst";
             // 
             // label3
             // 
@@ -304,7 +349,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(15, 330);
+            this.label7.Location = new System.Drawing.Point(17, 340);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(169, 16);
             this.label7.TabIndex = 6;
@@ -314,31 +359,31 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(15, 301);
+            this.label8.Location = new System.Drawing.Point(17, 311);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(145, 16);
             this.label8.TabIndex = 7;
             this.label8.Text = "Average Waiting Time:";
             // 
-            // label9
+            // ttaLbl
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(180, 330);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(15, 16);
-            this.label9.TabIndex = 8;
-            this.label9.Text = "0";
+            this.ttaLbl.AutoSize = true;
+            this.ttaLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ttaLbl.Location = new System.Drawing.Point(182, 340);
+            this.ttaLbl.Name = "ttaLbl";
+            this.ttaLbl.Size = new System.Drawing.Size(15, 16);
+            this.ttaLbl.TabIndex = 8;
+            this.ttaLbl.Text = "0";
             // 
-            // label10
+            // wtaveLbl
             // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(156, 303);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(15, 16);
-            this.label10.TabIndex = 9;
-            this.label10.Text = "0";
+            this.wtaveLbl.AutoSize = true;
+            this.wtaveLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wtaveLbl.Location = new System.Drawing.Point(158, 311);
+            this.wtaveLbl.Name = "wtaveLbl";
+            this.wtaveLbl.Size = new System.Drawing.Size(15, 16);
+            this.wtaveLbl.TabIndex = 9;
+            this.wtaveLbl.Text = "0";
             // 
             // label11
             // 
@@ -374,6 +419,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(62, 23);
             this.button1.TabIndex = 0;
+            this.button1.TabStop = false;
             this.button1.UseVisualStyleBackColor = true;
             // 
             // button4
@@ -383,6 +429,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(62, 23);
             this.button4.TabIndex = 14;
+            this.button4.TabStop = false;
             this.button4.UseVisualStyleBackColor = true;
             // 
             // button3
@@ -392,6 +439,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(63, 23);
             this.button3.TabIndex = 13;
+            this.button3.TabStop = false;
             this.button3.UseVisualStyleBackColor = true;
             // 
             // button2
@@ -401,6 +449,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(59, 23);
             this.button2.TabIndex = 12;
+            this.button2.TabStop = false;
             this.button2.UseVisualStyleBackColor = true;
             // 
             // button5
@@ -410,6 +459,7 @@
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(64, 23);
             this.button5.TabIndex = 12;
+            this.button5.TabStop = false;
             this.button5.UseVisualStyleBackColor = true;
             // 
             // button6
@@ -419,6 +469,7 @@
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(57, 23);
             this.button6.TabIndex = 15;
+            this.button6.TabStop = false;
             this.button6.UseVisualStyleBackColor = true;
             // 
             // button7
@@ -428,6 +479,7 @@
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(55, 23);
             this.button7.TabIndex = 16;
+            this.button7.TabStop = false;
             this.button7.UseVisualStyleBackColor = true;
             // 
             // button8
@@ -437,6 +489,7 @@
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(56, 23);
             this.button8.TabIndex = 17;
+            this.button8.TabStop = false;
             this.button8.UseVisualStyleBackColor = true;
             // 
             // button9
@@ -446,6 +499,7 @@
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(55, 23);
             this.button9.TabIndex = 18;
+            this.button9.TabStop = false;
             this.button9.UseVisualStyleBackColor = true;
             // 
             // button10
@@ -455,23 +509,24 @@
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(55, 23);
             this.button10.TabIndex = 19;
+            this.button10.TabStop = false;
             this.button10.UseVisualStyleBackColor = true;
             // 
-            // label12
+            // currentLbl
             // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(123, 272);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(15, 16);
-            this.label12.TabIndex = 13;
-            this.label12.Text = "0";
+            this.currentLbl.AutoSize = true;
+            this.currentLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.currentLbl.Location = new System.Drawing.Point(125, 253);
+            this.currentLbl.Name = "currentLbl";
+            this.currentLbl.Size = new System.Drawing.Size(16, 16);
+            this.currentLbl.TabIndex = 13;
+            this.currentLbl.Text = "--";
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(15, 272);
+            this.label13.Location = new System.Drawing.Point(17, 253);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(106, 16);
             this.label13.TabIndex = 12;
@@ -482,43 +537,60 @@
             this.btnNext.Location = new System.Drawing.Point(20, 412);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(75, 23);
-            this.btnNext.TabIndex = 14;
+            this.btnNext.TabIndex = 5;
             this.btnNext.Text = "Next";
             this.btnNext.UseVisualStyleBackColor = true;
-            this.btnNext.Click += new System.EventHandler(this.button11_Click);
+            this.btnNext.Click += new System.EventHandler(this.btnNext_click);
             // 
             // btnFinished
             // 
             this.btnFinished.Location = new System.Drawing.Point(109, 412);
             this.btnFinished.Name = "btnFinished";
             this.btnFinished.Size = new System.Drawing.Size(75, 23);
-            this.btnFinished.TabIndex = 15;
+            this.btnFinished.TabIndex = 6;
             this.btnFinished.Text = "Finish";
             this.btnFinished.UseVisualStyleBackColor = true;
+            this.btnFinished.Click += new System.EventHandler(this.btnFinished_Click);
             // 
-            // AddProcess
+            // remTimeCounterLbl
             // 
-            this.AddProcess.Location = new System.Drawing.Point(97, 108);
-            this.AddProcess.Name = "AddProcess";
-            this.AddProcess.Size = new System.Drawing.Size(75, 23);
-            this.AddProcess.TabIndex = 5;
-            this.AddProcess.Text = "Add Process";
-            this.AddProcess.UseVisualStyleBackColor = true;
-            this.AddProcess.Click += new System.EventHandler(this.AddProcess_Click);
+            this.remTimeCounterLbl.AutoSize = true;
+            this.remTimeCounterLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.remTimeCounterLbl.Location = new System.Drawing.Point(125, 282);
+            this.remTimeCounterLbl.Name = "remTimeCounterLbl";
+            this.remTimeCounterLbl.Size = new System.Drawing.Size(15, 16);
+            this.remTimeCounterLbl.TabIndex = 17;
+            this.remTimeCounterLbl.Text = "0";
+            // 
+            // remLbl
+            // 
+            this.remLbl.AutoSize = true;
+            this.remLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.remLbl.Location = new System.Drawing.Point(17, 282);
+            this.remLbl.Name = "remLbl";
+            this.remLbl.Size = new System.Drawing.Size(109, 16);
+            this.remLbl.TabIndex = 16;
+            this.remLbl.Text = "Remaining Burst:";
+            // 
+            // FormTextAnimator
+            // 
+            this.FormTextAnimator.DoWork += new System.ComponentModel.DoWorkEventHandler(this.FormTextAnimator_DoWork);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1173, 468);
+            this.Controls.Add(this.remTimeCounterLbl);
+            this.Controls.Add(this.remLbl);
             this.Controls.Add(this.btnFinished);
             this.Controls.Add(this.btnNext);
-            this.Controls.Add(this.label12);
+            this.Controls.Add(this.currentLbl);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label9);
+            this.Controls.Add(this.wtaveLbl);
+            this.Controls.Add(this.ttaLbl);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.lblTime);
@@ -561,8 +633,8 @@
         private System.Windows.Forms.Label lblTime;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label ttaLbl;
+        private System.Windows.Forms.Label wtaveLbl;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button button1;
@@ -575,7 +647,7 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label currentLbl;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnFinished;
@@ -585,14 +657,18 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn PId;
         private System.Windows.Forms.DataGridViewTextBoxColumn ArriveTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn BurstTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ReadyPId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn FinishedPId;
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeFin;
         private System.Windows.Forms.DataGridViewTextBoxColumn TurnaroundTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn WaitingTime;
         private System.Windows.Forms.Button AddProcess;
+        private System.Windows.Forms.Label remTimeCounterLbl;
+        private System.Windows.Forms.Label remLbl;
+        private System.Windows.Forms.Button resetBtn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ReadyPId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ArrivalTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RemainingBurst;
+        private System.ComponentModel.BackgroundWorker FormTextAnimator;
     }
 }
 

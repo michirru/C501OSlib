@@ -19,15 +19,17 @@ namespace DesignTry
         List<Process> finished;
         Process current;
         int timeUpdate;
-        CPUSchedulerSimulator cpuSim = new CPUSchedulerSimulator("sjf", 10);
+        CPUSchedulerSimulator cpuSim; // = new CPUSchedulerSimulator("sjf", 10);
 
         public Form1()
         {
             InitializeComponent();
             this.txtArrival.KeyPress += new KeyPressEventHandler(txtArrival_KeyPress);
             this.txtBurst.KeyPress += new KeyPressEventHandler(txtBurst_KeyPress);
+            cpuSim = new CPUSchedulerSimulator("sjf", 10);
+            FormTextAnimator.RunWorkerAsync();
         }
-        private void btnEnter_Click(object sender, EventArgs e)
+        private void autoFillbtn_click(object sender, EventArgs e)
         {
             Process.ResetCounter();
             cpuSim.CreateRandomProcess(out procList);
@@ -39,7 +41,7 @@ namespace DesignTry
                 dataInitial.Rows.Add(fill);
             }
         }
-        private void button11_Click(object sender, EventArgs e)
+        private void btnNext_click(object sender, EventArgs e)
         {
             dataReady.Rows.Clear();
             dataFinished.Rows.Clear();
@@ -56,9 +58,34 @@ namespace DesignTry
                 string[] fill = { "PID"+finish.getPID(), finish.getFinishedTime().ToString(), finish.getTurnaroundTime().ToString(), finish.getWaitingTime().ToString() };
                 dataFinished.Rows.Add(fill);
             }
-            lblTime.Text = timeUpdate.ToString();
+            updateLableText();
         }
+        private void updateLableText()
+        {
+            float awt = 0;
+            float att = 0;
+            for (int i = 0; i < finished.Count; i++)
+            {
+                awt += finished.ElementAt(i).getArrivalTime();
+                att += finished.ElementAt(i).getTurnaroundTime();
+            }
+            awt = awt / finished.Count;
+            att = att / finished.Count;
 
+            lblTime.Text = timeUpdate.ToString();
+            if (current != null)
+            {
+                currentLbl.Text = "PID" + current.getPID();
+                remTimeCounterLbl.Text = current.getRemainingBurst().ToString();
+            }
+            else
+            {
+                currentLbl.Text = "--";
+                remTimeCounterLbl.Text = "0";
+            }
+            wtaveLbl.Text = awt.ToString("00.000");
+            ttaLbl.Text = att.ToString("00.000");
+        }
         private void txtArrival_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = !char.IsDigit(e.KeyChar);
@@ -71,15 +98,59 @@ namespace DesignTry
 
         private void AddProcess_Click(object sender, EventArgs e)
         {
-            cpuSim.CreateProcess(int.Parse(txtArrival.Text), int.Parse(txtBurst.Text), out procList);
-            txtArrival.Text = "";
-            txtBurst.Text = "";
-            dataInitial.Rows.Clear();
-            for (int i = 0; i < procList.Count; i++)
+            if (txtArrival.Text != string.Empty && txtBurst.Text != string.Empty)
             {
-                var p = procList.ElementAt(i);
-                string[] fill = { "PID" + i, p.getArrivalTime().ToString(), p.getRemainingBurst().ToString() };
-                dataInitial.Rows.Add(fill);
+                cpuSim.CreateProcess(int.Parse(txtArrival.Text), int.Parse(txtBurst.Text), out procList);
+                txtArrival.Text = "";
+                txtBurst.Text = "";
+                dataInitial.Rows.Clear();
+                for (int i = 0; i < procList.Count; i++)
+                {
+                    var p = procList.ElementAt(i);
+                    string[] fill = { "PID" + i, p.getArrivalTime().ToString(), p.getRemainingBurst().ToString() };
+                    dataInitial.Rows.Add(fill);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No input detected in Arrival Time or Burst Time");
+            }
+            txtArrival.Focus();
+        }
+
+        private void resetBtn_Click(object sender, EventArgs e)
+        {
+            cpuSim = new CPUSchedulerSimulator("sjf", 10);
+            Process.ResetCounter();
+            dataInitial.Rows.Clear();
+            dataReady.Rows.Clear();
+            dataFinished.Rows.Clear();
+            procList = null;
+            queue = null;
+            finished = null;
+            current = null;
+            timeUpdate = 0;
+            lblTime.Text = "0";
+            currentLbl.Text = "--";
+            remTimeCounterLbl.Text = "0";
+            wtaveLbl.Text = "0";
+            ttaLbl.Text = "0";
+        }
+
+        private void btnFinished_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FormTextAnimator_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (true)
+            {
+                Random rand = new Random();
+                this.Invoke((MethodInvoker)delegate { this.Text = "C501 - JAPANESE CORN 凸ಠ益ಠ)凸"; });
+                Thread.Sleep(rand.Next(250,1000));
+                this.Invoke((MethodInvoker)delegate { this.Text = "C501 - JAPANESE CORN 凸(｀0´)凸"; });
+                Thread.Sleep(rand.Next(250, 1000));
             }
         }
     }
