@@ -29,3 +29,25 @@ C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\obj\Debug\Desig
 C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\obj\Debug\DesignTry.Form1.resources
 C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\obj\Debug\DesignTry.Properties.Resources.resources
 C:\Users\M\Documents\code download\C501OSlib\DesignTry\DesignTry\obj\Debug\DesignTry.csproj.GenerateResource.Cache
+C:\Users\Lou\Desktop\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\bin\Debug\DesignTry.exe.config
+C:\Users\Lou\Desktop\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.exe
+C:\Users\Lou\Desktop\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.pdb
+C:\Users\Lou\Desktop\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\bin\Debug\DesignTry.exe
+C:\Users\Lou\Desktop\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\bin\Debug\DesignTry.pdb
+C:\Users\Lou\Desktop\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\bin\Debug\C501OSlib.dll
+C:\Users\Lou\Desktop\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\bin\Debug\C501OSlib.pdb
+C:\Users\Lou\Desktop\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.csprojResolveAssemblyReference.cache
+C:\Users\Lou\Desktop\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.Form1.resources
+C:\Users\Lou\Desktop\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.Properties.Resources.resources
+C:\Users\Lou\Desktop\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.csproj.GenerateResource.Cache
+C:\Users\M\Documents\code download\C501OSlib-master\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\bin\Debug\DesignTry.exe.config
+C:\Users\M\Documents\code download\C501OSlib-master\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.exe
+C:\Users\M\Documents\code download\C501OSlib-master\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.pdb
+C:\Users\M\Documents\code download\C501OSlib-master\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\bin\Debug\DesignTry.exe
+C:\Users\M\Documents\code download\C501OSlib-master\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\bin\Debug\DesignTry.pdb
+C:\Users\M\Documents\code download\C501OSlib-master\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\bin\Debug\C501OSlib.dll
+C:\Users\M\Documents\code download\C501OSlib-master\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\bin\Debug\C501OSlib.pdb
+C:\Users\M\Documents\code download\C501OSlib-master\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.csprojResolveAssemblyReference.cache
+C:\Users\M\Documents\code download\C501OSlib-master\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.Form1.resources
+C:\Users\M\Documents\code download\C501OSlib-master\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.Properties.Resources.resources
+C:\Users\M\Documents\code download\C501OSlib-master\C501OSlib-cpuScheduling8052017\DesignTry\DesignTry\obj\Debug\DesignTry.csproj.GenerateResource.Cache

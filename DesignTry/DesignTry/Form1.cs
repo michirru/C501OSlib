@@ -28,6 +28,7 @@ namespace DesignTry
         int timeUpdate;
         int speed;
         bool simulate = false;
+        bool loop = true;
         CPUSchedulerSimulator cpuSim;
 
         Process currentIn
@@ -43,11 +44,29 @@ namespace DesignTry
                     if (value == null)
                     {
                         _current = value;
+                        foreach (DataGridViewRow data in dataInitial.Rows)
+                        {
+                            if (data.DefaultCellStyle.BackColor != SystemColors.Control)
+                            {
+                                data.DefaultCellStyle.BackColor = SystemColors.Control;
+                            }
+                        }
                     }
                     else
                     {
                         _current = value;
                         onCurrentChanged();
+                        foreach (DataGridViewRow data in dataInitial.Rows)
+                        {
+                            if ("P" + current.getPID() == data.Cells[0].Value.ToString())
+                            {
+                                data.DefaultCellStyle.BackColor = Color.Coral;
+                            }
+                            if ("P" + current.getPID() != data.Cells[0].Value.ToString() && data.DefaultCellStyle.BackColor != SystemColors.Control)
+                            {
+                                data.DefaultCellStyle.BackColor = SystemColors.Control;
+                            }
+                        }
                     }
                 }
                 else
@@ -59,17 +78,20 @@ namespace DesignTry
         private void onCurrentChanged()
         {
             loc += size;
-            size = 10;
+            size = 20;
             ganttButtons = new Button();
             ganttButtons.Enabled = true;
             ganttButtons.Location = new System.Drawing.Point(loc, 0);
-            ganttButtons.Margin = new System.Windows.Forms.Padding(0);
-            ganttButtons.Name = "P"+(buttons.Count + 1).ToString();
+            ganttButtons.Name = "P" + (buttons.Count + 1).ToString();
             ganttButtons.Text = "P" + currentIn.getPID();
-            ganttButtons.Size = new System.Drawing.Size(size, 20);
+            ganttButtons.Size = new System.Drawing.Size(size, 50);
             ganttButtons.Tag = currentIn;
+            ganttButtons.FlatStyle = FlatStyle.Flat;
             ganttButtons.TabIndex = 0;
             ganttButtons.TabStop = false;
+            ganttButtons.ForeColor = Color.White;
+            ganttButtons.Font = new Font("Tahoma", 10, FontStyle.Bold);
+            ganttButtons.BackColor = SystemColors.HotTrack;
             ganttButtons.UseVisualStyleBackColor = true;
             ganttButtons.MouseHover += new System.EventHandler(this.ganttButtons_MouseHover);
             buttons.Add(ganttButtons);
@@ -99,7 +121,7 @@ namespace DesignTry
             items.Add(new ComboItem { Text = "First In First Out", Value = "fifo" });
             items.Add(new ComboItem { Text = "Shortest Job First", Value = "sjf" });
             items.Add(new ComboItem { Text = "Highest Priority First", Value = "prio" });
-            AlgorithmBox.DataSource = items; 
+            AlgorithmBox.DataSource = items;
             AlgorithmBox.SelectedIndex = 1;
             speedBox.SelectedIndex = 0;
             FormTextAnimator.RunWorkerAsync();
@@ -112,7 +134,7 @@ namespace DesignTry
             for (int i = 0; i < procList.Capacity; i++)
             {
                 var p = procList.ElementAt(i);
-                string[] fill = { "P"+i, p.getArrivalTime().ToString(), p.getRemainingBurst().ToString(), p.getPriorityLevel().ToString() };
+                string[] fill = { "P" + i, p.getArrivalTime().ToString(), p.getRemainingBurst().ToString(), p.getPriorityLevel().ToString() };
                 dataInitial.Rows.Add(fill);
             }
         }
@@ -125,19 +147,19 @@ namespace DesignTry
             for (int i = 0; i < queue.Count; i++)
             {
                 var ready = queue.ElementAt(i);
-                string[] fill = {"P"+ready.getPID(), ready.getArrivalTime().ToString(), ready.getRemainingBurst().ToString()};
+                string[] fill = { "P" + ready.getPID(), ready.getArrivalTime().ToString(), ready.getRemainingBurst().ToString() };
                 dataReady.Rows.Add(fill);
             }
             for (int i = 0; i < finished.Count; i++)
             {
                 var finish = finished.ElementAt(i);
-                string[] fill = { "P"+finish.getPID(), finish.getStartTime().ToString(), finish.getFinishedTime().ToString(), finish.getTurnaroundTime().ToString(), finish.getWaitingTime().ToString() };
+                string[] fill = { "P" + finish.getPID(), finish.getStartTime().ToString(), finish.getFinishedTime().ToString(), finish.getTurnaroundTime().ToString(), finish.getWaitingTime().ToString() };
                 dataFinished.Rows.Add(fill);
             }
             updateLableText();
             size += 5;
             if (currentIn != null)
-                buttons.ElementAt(btnIndex-1).Size = new Size(size, 20);
+                buttons.ElementAt(btnIndex - 1).Size = new Size(size, 50);
         }
         private void updateLableText()
         {
@@ -145,7 +167,7 @@ namespace DesignTry
             float att = 0;
             for (int i = 0; i < finished.Count; i++)
             {
-                awt += finished.ElementAt(i).getArrivalTime();
+                awt += finished.ElementAt(i).getWaitingTime();
                 att += finished.ElementAt(i).getTurnaroundTime();
             }
             awt = awt / finished.Count;
@@ -203,13 +225,14 @@ namespace DesignTry
             {
                 simulate = false;
                 SimulateBtn.Text = "Auto Simulate";
+                AutoSimulateWorker.CancelAsync();
             }
             else
             {
                 simulate = true;
                 SimulateBtn.Text = "Stop";
+                AutoSimulateWorker.RunWorkerAsync();
             }
-            AutoSimulateTimer_Tick(sender, e);
         }
 
         private void AlgorithmBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -252,45 +275,57 @@ namespace DesignTry
         }
         private void AutoSimulateTimer_Tick(object sender, EventArgs e)
         {
-            if (simulate)
-            {
-                if (!AutoSimulateWorker.IsBusy)
-                    AutoSimulateWorker.RunWorkerAsync();
-            }
         }
 
         private void AutoSimulateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             while (simulate)
             {
-                this.Invoke((MethodInvoker)delegate {
-                    speed = int.Parse(speedBox.SelectedItem.ToString());
-                    btnNext_click(sender, e);
-                    bool allfinished = true;
-                    foreach (Process p in procList)
+                try
+                {
+                    if (AutoSimulateWorker.CancellationPending)
+                        e.Cancel = true;
+                    this.Invoke((MethodInvoker)delegate
                     {
-                        if (!p.isFinished())
-                            allfinished = false;
-                    }
-                    if (allfinished)
-                    {
-                        simulateBtn_Click(sender, e);
+                        speed = int.Parse(speedBox.SelectedItem.ToString());
                         btnNext_click(sender, e);
-                    }
-                });
-                Thread.Sleep(speed);
+                        bool allfinished = true;
+                        foreach (Process p in procList)
+                        {
+                            if (!p.isFinished())
+                                allfinished = false;
+                        }
+                        if (allfinished)
+                        {
+                            simulateBtn_Click(sender, e);
+                            btnNext_click(sender, e);
+                        }
+                    });
+                    Thread.Sleep(speed);
+                }
+                catch (ObjectDisposedException)
+                {
+                }
             }
         }
         //Just for fun
         private void FormTextAnimator_DoWork(object sender, DoWorkEventArgs e)
         {
-            Random rand = new Random();
-            string[] kamo0 = { "=͟͟͞͞( •̀д•́)))", "凸(｀0´)凸", "༼ つ ͠° ͟ ͟ʖ ͡° ༽つ", "(╬⓪益⓪)", "凸ಠ益ಠ)凸" };
-            string[] kamo1 = { "(ʘ言ʘ╬)", "(Ò 皿 Ó ╬)", "(@益@ .:;)", "(´･益･｀*)", "٩(ʘ益ʘ╬)۶", "Щ(ಠ益ಠЩ)" };
-            while (true)
+            while (loop)
             {
-                this.Invoke((MethodInvoker)delegate { this.Text = "C501 - JAPANESE CORN " + kamo0[rand.Next(kamo0.Length)] + "     " + kamo1[rand.Next(kamo1.Length)]; });
-                Thread.Sleep(rand.Next(125, 500));
+                try
+                {
+                    Random rand = new Random();
+                    string[] kamo0 = { "Ogawa, Kevin L.", "Potente, Loue A.", "Redor, Michael I.", "Sy, Mabeeson V." };
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        this.Text = "C501 - JAPANESE CORN  " + kamo0[rand.Next(kamo0.Length)];
+                    });
+                    Thread.Sleep(rand.Next(125, 500));
+                }
+                catch (ObjectDisposedException)
+                {
+                }
             }
         }
     }
